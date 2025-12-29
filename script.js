@@ -39,9 +39,12 @@ for (let row = 0; row < rows; row++) {
     const block = document.createElement('div');
     block.classList.add('block');
     board.appendChild(block);
-    block.innerText = `${row}-${col}`;
     blocks[`${row}-${col}`] = block;
   }
+}
+
+function isCollision(head) {
+  return snake.some((seg) => seg.x === head.x && seg.y === head.y);
 }
 
 function render() {
@@ -60,6 +63,14 @@ function render() {
 
   // Wall Collision logic
   if (head.x < 0 || head.y < 0 || head.x >= rows || head.y >= cols) {
+    modal.style.display = 'flex';
+    startGameModal.style.display = 'none';
+    gameOverModal.style.display = 'flex';
+    clearInterval(intervalId);
+    return;
+  }
+
+  if (isCollision(head)) {
     modal.style.display = 'flex';
     startGameModal.style.display = 'none';
     gameOverModal.style.display = 'flex';
